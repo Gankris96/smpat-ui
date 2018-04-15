@@ -1,0 +1,170 @@
+<!doctype html>
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    li a:hover {
+        background-color: #111;
+    }
+    .active {
+        background-color: #4CAF50;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
+</style>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>SMPAT</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="apple-touch-icon" href="icon.png">
+        <!-- Place favicon.ico in the root directory -->
+
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/main.css">
+    </head>
+    <script>
+        function populateDataTab(){
+            tablePart=document.getElementById("table");
+            graphPart=document.getElementById("graph");
+
+            //make api call to get data
+
+            //populate table with api data
+
+            tablePart.style.visibility="visible";
+            graphPart.style.visibility="visible";
+
+        }
+    </script>
+    <body>
+        <!--[if lte IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+
+        <!-- Add your site or application content here -->
+        <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+        <script>
+            window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+            ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+        </script>
+        <script src="https://www.google-analytics.com/analytics.js" async defer></script>
+    <div>
+        <navbar>
+            <ul>
+                <li style="float:left"><a href="index.html" class="active">SMPAT HOME</a></li>
+                <li><a href="twitterAPI.html">Twitter Predictions</a></li>
+                <li><a href="newsAPI.html">News Predictions</a></li>
+                <li><a href="Correlation.html">Correlation</a></li>
+                <li><a href="#contact">Stock Investment</a></li>
+                <li><a href="#contact">Investment Recommendations</a></li>
+                <li style="float:right"><a class="active" href="#about">About</a></li>
+            </ul>
+        </navbar>
+
+    </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div style="margin: 10px";>
+            <div>
+                <span style="font-family:Arial">Follow the latest Stock market news here.</span>
+            </div>
+        </div>
+
+        <div align="center" style="columns: max-content";>
+            <select>
+                <option>INFY</option>
+                <option>TATAMOTORS</option>
+                <option>TVSMOTOR</option>
+                <option>SBIN</option>
+                <option>HCLTECH</option>
+            </select>
+            <div style="margin: 10px;padding: 10px";>
+                <button onclick="populateDataTab()">GO</button>
+            </div>
+        </div>
+<br/>
+        <div style="width: 50%; float:left">
+            <div id="table" style="overflow-x:auto;margin-left: 4px;visibility: hidden";>
+
+                <table style="width:100%">
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Date</th>
+                        <th>Opening Prive</th>
+                        <th>Closing Price</th>
+                        <th>High Price</th>
+                        <th>Low Price</th>
+                    </tr>
+                    <tr>
+                        <td>Jill</td>
+                        <td>Smith</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                        <td>50</td>
+                    </tr>
+                    <tr>
+                        <td>Eve</td>
+                        <td>Jackson</td>
+                        <td>94</td>
+                        <td>94</td>
+                        <td>94</td>
+                        <td>94</td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+
+        <div id="graph" style="width: 50%; float:right;margin-left: 4px;visibility: hidden";>
+            #Graph here
+        </div>
+
+        <div>
+        <footer>
+            <div>
+            </div>
+        </footer>
+    </div>
+    </body>
+</html>
