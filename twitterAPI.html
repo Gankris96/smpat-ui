@@ -55,20 +55,84 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <script>
+    function getResponse(){
+        if(xhr.status==200&&xhr.readyState==4){
+            data=xhr.responseText;
+            lines=data.split('\n');
+            headings=lines[0].split(',');
+            tableHeading=document.createElement("tr");
+            for(i=0;i<headings.length;i++){
+                if(i==0){
+                    continue;
+                }
+                th=document.createElement("th");
+                th.innerHTML=headings[i];
+                tableHeading.appendChild(th);
+            }
+            tablePart.appendChild(tableHeading);
+            lastRows=lines.slice(1).slice(-15);
+            // alert(lastRows);
+            for(row=0;row<14;row++){
+                tr=document.createElement("tr");
+                data=lastRows[row].split(',');
+                for(j=0;j<data.length;j++) {
+                    if(j==0){
+                        continue;
+                    }
+                    td = document.createElement("td");
+                    td.innerHTML = data[j];
+                    tr.appendChild(td);
+                }
+                tablePart.appendChild(tr);
+            }
+        }
+
+    }
+    tweetData="";
+    function getResponseTweets(){
+        if(xhr2.status==200&&xhr2.readyState==4){
+            alert("got data");
+            data=xhr2.responseText;
+            // alert(data);
+            lines=data.split('\n');
+            // alert(lines);
+            headings=lines[0].split(',');
+            for(i=0;i<lines.length;i++){
+                // alert(lines[i])
+                tweetData=tweetData+" "+lines[i].split(",")[0]+":"+lines[i].split(",")[1]
+            }
+        }
+        marqueeText=document.getElementById("tweet");
+        marqueeText.innerText=tweetData
+        document.getElementById("tweetslider").style.visibility="visible";
+
+
+    }
     function populateDataTab(){
-        tweetSlider=document.getElementById("tweetslider");
-        tablePart=document.getElementById("table");
+        tablePart=document.getElementById("tableData");
         graphPart=document.getElementById("graph");
-        tweetData=document.getElementById("tweet");
 
         //make api call to get data
-
-        //populate table with api data
-
+        xhr =new XMLHttpRequest();
+        xhr.onreadystatechange=getResponse;
+        xhr.open("GET","http://localhost:63342/smpat-ui/companyTwitter/twitter/INFY.csv",true);
+        xhr.send();
         tablePart.style.visibility="visible";
-        graphPart.style.visibility="visible";
-        tweetSlider.style.visibility="visible";
 
+        img=document.createElement("img");
+        img.src="http://localhost:63342/smpat-ui/companyTwitter/twitterGraph/INFY.jpg";
+        // img.width=100;
+        // img.height=100;
+        graphPart.appendChild(img);
+
+        graphPart.style.visibility="visible";
+        // debugger;
+
+        xhr2=new XMLHttpRequest();
+        xhr2.onreadystatechange=getResponseTweets;
+        xhr2.open("GET","http://localhost:63342/smpat-ui/companyTwitter/INFY_Tweets.csv",true);
+        xhr2.send();
+        tablePart.style.visibility="visible";
     }
 </script>
 <body>
@@ -82,6 +146,7 @@
 <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
 <script src="js/plugins.js"></script>
 <script src="js/main.js"></script>
+<script src="d3.min.js?v=3.2.8"></script>
 
 <!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
 <script>
@@ -92,8 +157,8 @@
 <div>
     <navbar>
         <ul>
-            <li style="float:left"><a href="index.html" class="active">SMPAT HOME</a></li>
-            <li><a href="twitterAPI.html">Twitter Predictions</a></li>
+            <li style="float:left"><a href="index.html" >SMPAT HOME</a></li>
+            <li><a href="twitterAPI.html" class="active">Twitter Predictions</a></li>
             <li><a href="#news">News Predictions</a></li>
             <li><a href="#contact">Correlation</a></li>
             <li><a href="#contact">Stock Investment</a></li>
@@ -103,10 +168,6 @@
     </navbar>
 
 </div>
-<br/>
-<br/>
-<br/>
-<br/>
 <div style="margin: 10px";>
     <div>
         <span style="font-family:Arial">Follow the latest Stock market news here.</span>
@@ -130,42 +191,24 @@
 
 <div id="tweetslider" style="margin: 10px; padding: 10px; background-color: #b3d4fc;width: 100%;height: 30px;visibility: hidden;">
 <marquee id="tweet" style="font-family: 'Comic Sans MS';font-weight: bolder;">
-    Hello
+
 </marquee>
 </div>
-<br/>
-<br/>
-<br/>
 
 <div style="width: 50%; float:left">
     <div id="table" style="overflow-x:auto;margin-left: 4px;visibility: hidden";>
 
-        <table style="width:100%">
-            <tr>
-                <th>Symbol</th>
-                <th>Date</th>
-                <th>Predicted</th>
-                <th>Actual</th>
-            </tr>
-            <tr>
-                <td>Jill</td>
-                <td>Smith</td>
-                <td>50</td>
-                <td>50</td>
-            </tr>
-            <tr>
-                <td>Eve</td>
-                <td>Jackson</td>
-                <td>94</td>
-                <td>94</td>
-            </tr>
+        <table id="tableData" style="width:100%">
+
         </table>
 
     </div>
 </div>
 
-<div id="graph" style="width: 50%; float:right;margin-left: 10px;visibility: hidden";>
-    #Graph here
+<div style="width:40%; float:right;margin-left: 4px">
+    <div id="graph" style="overflow-x:auto;margin-left: 4px;visibility: hidden">
+        <!--<img src="http://localhost:63342/smpat-ui/companyStock/StockGraph/INFY.jpg"/>-->
+    </div>
 </div>
 
 <div>
