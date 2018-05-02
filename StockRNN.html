@@ -1,0 +1,245 @@
+<!doctype html>
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+    li:active{
+        background-color: #4CAF50;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    li a:hover {
+        background-color: #111;
+    }
+    .active {
+        background-color: #4CAF50;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
+</style>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>SMPAT</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<script src="d3.min.js?v=3.2.8"></script>
+<script>
+    function getResponseImage() {
+        if(xhr.status==200&&xhr.readyState==4){
+            data=xhr.responseText;
+            lines=data.split('\n');
+            headings=lines[0].split(',');
+            tableHeading=document.createElement("tr");
+            for(i=0;i<headings.length;i++){
+                th=document.createElement("th");
+                th.innerHTML=headings[i];
+                tableHeading.appendChild(th);
+            }
+            tablePart.appendChild(tableHeading);
+            lastRows=lines.slice(1).slice(-15);
+            // alert(lastRows);
+            for(row=0;row<14;row++){
+                tr=document.createElement("tr");
+                data=lastRows[row].split(',');
+                for(j=0;j<data.length;j++) {
+                    td = document.createElement("td");
+                    td.innerHTML = data[j];
+                    tr.appendChild(td);
+                }
+                tablePart.appendChild(tr);
+            }
+        }
+    }
+
+    function getResponse(){
+        if(xhr.status==200&&xhr.readyState==4){
+            data=xhr.responseText;
+            lines=data.split('\n');
+            headings=["Date","Predicted","Actual"];
+            // alert(headings)
+            tableHeading=document.createElement("tr");
+            for(i=0;i<headings.length;i++){
+                th=document.createElement("th");
+                th.innerHTML=headings[i];
+                tableHeading.appendChild(th);
+            }
+            tablePart.appendChild(tableHeading);
+            lastRows=lines.slice(1).slice(-15);
+            // alert(lastRows);
+            for(row=0;row<14;row++){
+                tr=document.createElement("tr");
+                data=lastRows[row].split(',');
+                for(j=0;j<data.length;j++) {
+                    td = document.createElement("td");
+                    td.innerHTML = data[j];
+                    tr.appendChild(td);
+                }
+
+                tablePart.appendChild(tr);
+            }
+        }
+
+    }
+    function populateDataTab(){
+        tableP=document.getElementById("table");
+        graphPart=document.getElementById("graph");
+        if(document.getElementById("tableData")==null){
+            tablePart=document.createElement("table");
+            tablePart.id="tableData";
+            tableP.appendChild(tablePart);
+        }
+        else{
+            tableP.removeChild(tablePart);
+            tablePart=document.createElement("table");
+            tablePart.id="tableData";
+            tableP.appendChild(tablePart);
+        }
+        //make api call to get data
+        Companysymbol=document.getElementById("symbol");
+        // alert(Companysymbol.value);
+        xhr =new XMLHttpRequest();
+        xhr.onreadystatechange=getResponse;
+        xhr.open("GET","http://localhost:63342/smpat-ui/Alldata/RNN/RRNPredictionsUpdated/Predictions_"+Companysymbol.value+".csv",true);
+        xhr.send();
+        tablePart.style.visibility="visible";
+
+        if(document.getElementById("gr")==null){
+            img=document.createElement("img");
+            img.id="gr";
+            graphPart.appendChild(img);
+        }
+        img.src="http://localhost:63342/smpat-ui/Alldata/RNN/rnnPredictedStockImages/"+Companysymbol.value+".jpg";
+        // img.width=100;
+        // img.height=100;
+        graphPart.appendChild(img);
+
+        graphPart.style.visibility="visible";
+        // debugger;
+    }
+</script>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<script src="js/vendor/modernizr-3.5.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+
+<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+<script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async defer></script>
+<div>
+    <navbar>
+        <ul class="nav">
+            <li style="float:left"><a href="index.html">SMPAT HOME</a></li>
+            <li><a href="twitterAPI.html">Twitter Predictions</a></li>
+            <li><a href="newsAPI.html">News Predictions</a></li>
+            <li><a href="Correlation.html">Correlation</a></li>
+            <li><a href="StockRNN.html" class="active">Stock RNN</a></li>
+            <li><a href="Investment.html">Investment Recommendations</a></li>
+            <li style="float:right"><a class="active" href="#about">About</a></li>
+        </ul>
+    </navbar>
+
+</div>
+<div style="margin: 10px";>
+    <div>
+        <span style="font-family:Arial">Follow the latest Stock market news here.</span>
+    </div>
+    <div>
+        <img src="peslogo.png" height="100px" width="100px"/>
+    </div>
+</div>
+
+<div align="center" style="columns: max-content">
+    <select id="symbol">
+        <option>INFY</option>
+        <option>TATAMOTORS</option>
+        <!--<option>TVSMOTOR</option>-->
+        <!--<option>SBIN</option>-->
+        <option>FORTIS</option>
+        <option>DABUR</option>
+        <option>NATCOPHARM</option>
+        <option>HDFC</option>
+        <option>HCLTECH</option>
+        <option>ASHOKLEY</option>
+        <option>TATACOMM</option>
+        <option>MEP</option>
+        <option>SIEMENS</option>
+        <option>HEROMOTOCO</option>
+        <option>HOTELEELA</option>
+        <option>MINDTREE</option>
+        <option>MHRIL</option>
+        <option>NIITTECH</option>
+        <option>NOCIL</option>
+        <option>PETRONET</option>
+        <option>POWERGRID</option>
+        <!--<option>TVSMOTOR</option>-->
+    </select>
+    <div style="margin: 10px;padding: 10px">
+        <button onclick="populateDataTab()">GO</button>
+    </div>
+</div>
+<br/>
+<div style="width: 50%; float:left">
+    <div id="table" style="overflow-x:auto;margin-left: 4px;visibility: hidden">
+
+    </div>
+</div>
+<div style="width:40%; float:right;margin-left: 4px">
+    <div id="graph" style="overflow-x:auto;margin-left: 4px;visibility: hidden">
+        <!--<img src="http://localhost:63342/smpat-ui/companyStock/StockGraph/INFY.jpg"/>-->
+    </div>
+</div>
+
+<div>
+    <footer>
+        <div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

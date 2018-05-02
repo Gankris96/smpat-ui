@@ -91,6 +91,7 @@
                 data=xhr.responseText;
                 lines=data.split('\n');
                 headings=lines[0].split(',');
+                // alert(headings)
                 tableHeading=document.createElement("tr");
                 for(i=0;i<headings.length;i++){
                     th=document.createElement("th");
@@ -108,24 +109,41 @@
                         td.innerHTML = data[j];
                         tr.appendChild(td);
                     }
+
                     tablePart.appendChild(tr);
                 }
             }
 
         }
         function populateDataTab(){
-            tablePart=document.getElementById("tableData");
+            tableP=document.getElementById("table");
             graphPart=document.getElementById("graph");
-
+            if(document.getElementById("tableData")==null){
+                tablePart=document.createElement("table");
+                tablePart.id="tableData";
+                tableP.appendChild(tablePart);
+            }
+            else{
+                tableP.removeChild(tablePart);
+                tablePart=document.createElement("table");
+                tablePart.id="tableData";
+                tableP.appendChild(tablePart);
+            }
             //make api call to get data
+            Companysymbol=document.getElementById("symbol");
+            // alert(Companysymbol.value);
             xhr =new XMLHttpRequest();
             xhr.onreadystatechange=getResponse;
-            xhr.open("GET","http://localhost:63342/smpat-ui/companyStock/Stock/INFY.csv",true);
+            xhr.open("GET","http://localhost:63342/smpat-ui/Alldata/companyStock/Stock/"+Companysymbol.value+".csv",true);
             xhr.send();
             tablePart.style.visibility="visible";
 
-            img=document.createElement("img");
-            img.src="http://localhost:63342/smpat-ui/companyStock/StockGraph/INFY.jpg";
+            if(document.getElementById("gr")==null){
+                img=document.createElement("img");
+                img.id="gr";
+                graphPart.appendChild(img);
+            }
+            img.src="http://localhost:63342/smpat-ui/Alldata/companyStock/StockGraph/"+Companysymbol.value+".jpg";
             // img.width=100;
             // img.height=100;
             graphPart.appendChild(img);
@@ -160,8 +178,8 @@
                 <li><a href="twitterAPI.html">Twitter Predictions</a></li>
                 <li><a href="newsAPI.html">News Predictions</a></li>
                 <li><a href="Correlation.html">Correlation</a></li>
-                <li><a href="#contact">Stock Investment</a></li>
-                <li><a href="#contact">Investment Recommendations</a></li>
+                <li><a href="StockRNN.html">Stock RNN</a></li>
+                <li><a href="Investment.html">Investment Recommendations</a></li>
                 <li style="float:right"><a class="active" href="#about">About</a></li>
             </ul>
         </navbar>
@@ -171,15 +189,35 @@
             <div>
                 <span style="font-family:Arial">Follow the latest Stock market news here.</span>
             </div>
+            <div>
+                <img src="peslogo.png" height="100px" width="100px"/>
+            </div>
         </div>
 
         <div align="center" style="columns: max-content">
-            <select>
+            <select id="symbol">
                 <option>INFY</option>
                 <option>TATAMOTORS</option>
-                <option>TVSMOTOR</option>
-                <option>SBIN</option>
+                <!--<option>TVSMOTOR</option>-->
+                <!--<option>SBIN</option>-->
+                <option>FORTIS</option>
+                <option>DABUR</option>
+                <option>NATCOPHARM</option>
+                <option>HDFC</option>
                 <option>HCLTECH</option>
+                <option>ASHOKLEY</option>
+                <option>TATACOMM</option>
+                <option>MEP</option>
+                <option>SIEMENS</option>
+                <option>HEROMOTOCO</option>
+                <option>HOTELEELA</option>
+                <option>MINDTREE</option>
+                <option>MHRIL</option>
+                <option>NIITTECH</option>
+                <option>NOCIL</option>
+                <option>PETRONET</option>
+                <option>POWERGRID</option>
+                <!--<option>TVSMOTOR</option>-->
             </select>
             <div style="margin: 10px;padding: 10px">
                 <button onclick="populateDataTab()">GO</button>
@@ -188,9 +226,6 @@
 <br/>
         <div style="width: 50%; float:left">
             <div id="table" style="overflow-x:auto;margin-left: 4px;visibility: hidden">
-
-                <table id="tableData" style="width:100%">
-                </table>
 
             </div>
         </div>

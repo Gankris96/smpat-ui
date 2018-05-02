@@ -1,0 +1,148 @@
+<!doctype html>
+<style>
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    li {
+        float: left;
+    }
+    li:active{
+        background-color: #4CAF50;
+    }
+
+    li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    li a:hover {
+        background-color: #111;
+    }
+    .active {
+        background-color: #4CAF50;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even){background-color: #f2f2f2}
+</style>
+<html class="no-js" lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>SMPAT</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<script src="d3.min.js?v=3.2.8"></script>
+<script>
+
+    function getResponseInvest(){
+        tweetData="";
+        if(xhr2.status==200&&xhr2.readyState==4) {
+            // alert("got data");
+            data = xhr2.responseText;
+            marqueeText = document.getElementById("dataPart");
+            marqueeText.innerText = data;
+            // document.getElementById("tweetslider").style.visibility = "visible";
+            marqueeText.style.visibility="visible";
+        }
+    }
+
+    function populateDataTab(){
+        dataPart=document.getElementById("dataPart");
+        xhr2=new XMLHttpRequest();
+        xhr2.onreadystatechange=getResponseInvest;
+        xhr2.open("GET","http://localhost:63342/smpat-ui/RecommendedStocks.txt",true);
+        xhr2.send();
+        dataPart.style.visibility="visible";
+    }
+</script>
+<body>
+<!--[if lte IE 9]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+<![endif]-->
+
+<!-- Add your site or application content here -->
+<script src="js/vendor/modernizr-3.5.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-3.2.1.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+
+
+<!-- Google Analytics: change UA-XXXXX-Y to be your site's ID. -->
+<script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-XXXXX-Y','auto');ga('send','pageview')
+</script>
+<script src="https://www.google-analytics.com/analytics.js" async defer></script>
+<div>
+    <navbar>
+        <ul class="nav">
+            <li style="float:left"><a href="index.html" >SMPAT HOME</a></li>
+            <li><a href="twitterAPI.html">Twitter Predictions</a></li>
+            <li><a href="newsAPI.html">News Predictions</a></li>
+            <li><a href="Correlation.html">Correlation</a></li>
+            <li><a href="StockRNN.html">Stock RNN</a></li>
+            <li><a href="Investment.html" class="active">Investment Recommendations</a></li>
+            <li style="float:right"><a class="active" href="#about">About</a></li>
+        </ul>
+    </navbar>
+
+</div>
+<div style="margin: 10px";>
+    <div>
+        <span style="font-family:Arial">Follow the latest Stock market news here.</span>
+    </div>
+    <div>
+        <img src="peslogo.png" height="100px" width="100px"/>
+    </div>
+</div>
+
+<div align="center" style="columns: max-content">
+    <select id="symbol">
+        <option>5000</option>
+        <option>10000</option>
+    </select>
+    <div style="margin: 10px;padding: 10px">
+        <button onclick="populateDataTab()">GO</button>
+    </div>
+</div>
+<br/>
+<div style="width: 50%; float:left">
+    <h2 id="dataPart" style="overflow-x:auto;margin-left: 4px;visibility: hidden">
+
+    </h2>
+</div>
+<div>
+    <footer>
+        <div>
+        </div>
+    </footer>
+</div>
+</body>
+</html>

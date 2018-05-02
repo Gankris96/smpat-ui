@@ -57,10 +57,22 @@
 <script>
     function populateDataTab(){
         graphPart=document.getElementById("graph");
-
+        // alert(document.getElementById("image"))
         //make api call to get data
-
+        var opt = document.getElementById("sector");
+        // alert(opt.value);
         //populate table with api data
+        if(document.getElementById("image")!=null){
+        img=document.getElementById("image")
+        }
+        else{
+            img=document.createElement("img");
+        }
+        img.id="image";
+        img.src="http://localhost:63342/smpat-ui/corr/"+opt.value+".jpg";
+        // img.width=100;
+        // img.height=100;
+        graphPart.appendChild(img);
 
         graphPart.style.visibility="visible";
 
@@ -92,30 +104,34 @@
             <li><a href="twitterAPI.html">Twitter Predictions</a></li>
             <li><a href="newsAPI.html">News Predictions</a></li>
             <li><a href="Correlation.html" class="active">Correlation</a></li>
-            <li><a href="#contact">Stock Investment</a></li>
-            <li><a href="#contact">Investment Recommendations</a></li>
+            <li><a href="StockRNN.html">Stock RNN</a></li>
+            <li><a href="Investment.html">Investment Recommendations</a></li>
             <li style="float:right"><a class="active" href="#about">About</a></li>
         </ul>
     </navbar>
 
 </div>
-<br/>
-<br/>
-<br/>
-<br/>
 <div style="margin: 10px";>
     <div>
         <span style="font-family:Arial">Follow the latest Stock market news here.</span>
     </div>
+    <div>
+        <img src="peslogo.png" height="100px" width="100px"/>
+    </div>
 </div>
 
 <div align="center" style="columns: max-content";>
-    <select >
+    <select id="sector">
         <option>IT</option>
-        <option>POWER</option>
-        <option>AUTO</option>
-        <option>BANK</option>
-        <option>TRAVEL</option>
+        <option>Power</option>
+        <option>Auto</option>
+        <option>Bank</option>
+        <option>Hospitality</option>
+        <option>Infrastructure</option>
+        <option>Personal</option>
+        <option>PetroChem</option>
+        <option>Pharma</option>
+        <option>Telecomm</option>
     </select>
     <div style="margin: 10px;padding: 10px";>
         <button onclick="populateDataTab()">GO</button>

@@ -59,12 +59,10 @@
         if(xhr.status==200&&xhr.readyState==4){
             data=xhr.responseText;
             lines=data.split('\n');
-            headings=lines[0].split(',');
+            headings=["Date","Predicted","Actual"];
+            // alert(headings);
             tableHeading=document.createElement("tr");
             for(i=0;i<headings.length;i++){
-                if(i==0){
-                    continue;
-                }
                 th=document.createElement("th");
                 th.innerHTML=headings[i];
                 tableHeading.appendChild(th);
@@ -76,9 +74,6 @@
                 tr=document.createElement("tr");
                 data=lastRows[row].split(',');
                 for(j=0;j<data.length;j++) {
-                    if(j==0){
-                        continue;
-                    }
                     td = document.createElement("td");
                     td.innerHTML = data[j];
                     tr.appendChild(td);
@@ -88,51 +83,75 @@
         }
 
     }
-    tweetData="";
+
     function getResponseTweets(){
+        tweetData="";
         if(xhr2.status==200&&xhr2.readyState==4){
-            alert("got data");
+            // alert("got data");
             data=xhr2.responseText;
             // alert(data);
             lines=data.split('\n');
             // alert(lines);
+            lastRows=lines.slice(1).slice(-10);
+            // alert(lastRows.length);
             headings=lines[0].split(',');
-            for(i=0;i<lines.length;i++){
-                // alert(lines[i])
-                tweetData=tweetData+" "+lines[i].split(",")[0]+":"+lines[i].split(",")[1]
+            for(i=0;i<lastRows.length;i++){
+                // alert(lastRows[i]);
+                // alert(lastRows[i].split(",")[0]);
+                // alert(lastRows[i].split(",")[1]);
+                tweetData=tweetData+" "+lastRows[i].split(",")[0]+":"+lastRows[i].split(",")[1]
             }
+            marqueeText=document.getElementById("tweet");
+            marqueeText.innerText=tweetData;
+            document.getElementById("tweetslider").style.visibility="visible";
+
         }
-        marqueeText=document.getElementById("tweet");
-        marqueeText.innerText=tweetData
-        document.getElementById("tweetslider").style.visibility="visible";
 
 
     }
     function populateDataTab(){
-        tablePart=document.getElementById("tableData");
+        tableP=document.getElementById("table");
         graphPart=document.getElementById("graph");
-
+        if(document.getElementById("tableData")==null){
+            tablePart=document.createElement("table");
+            tablePart.id="tableData";
+            tableP.appendChild(tablePart);
+        }
+        else{
+            tableP.removeChild(tablePart);
+            tablePart=document.createElement("table");
+            tablePart.id="tableData";
+            tableP.appendChild(tablePart);
+        }
         //make api call to get data
         xhr =new XMLHttpRequest();
         xhr.onreadystatechange=getResponse;
-        xhr.open("GET","http://localhost:63342/smpat-ui/companyTwitter/twitter/INFY.csv",true);
+        Companysymbol=document.getElementById("symbol");
+        xhr.open("GET","http://localhost:63342/smpat-ui/Alldata/companyTwitter/twitter/"+Companysymbol.value+"_Final.csv",true);
         xhr.send();
         tablePart.style.visibility="visible";
 
-        img=document.createElement("img");
-        img.src="http://localhost:63342/smpat-ui/companyTwitter/twitterGraph/INFY.jpg";
+        if(document.getElementById("gr")==null){
+            img=document.createElement("img");
+            img.id="gr";
+            graphPart.appendChild(img);
+        }
+        img.src="http://localhost:63342/smpat-ui/Alldata/companyTwitter/twitterGraph/"+Companysymbol.value+".jpg";
         // img.width=100;
         // img.height=100;
-        graphPart.appendChild(img);
 
+        marqueeText=document.getElementById("tweet");
+        marqueeText.innerText="";
         graphPart.style.visibility="visible";
         // debugger;
 
         xhr2=new XMLHttpRequest();
         xhr2.onreadystatechange=getResponseTweets;
-        xhr2.open("GET","http://localhost:63342/smpat-ui/companyTwitter/INFY_Tweets.csv",true);
+        xhr2.open("GET","http://localhost:63342/smpat-ui/TwitterCompanyNewsStock/"+Companysymbol.value+".csv",true);
         xhr2.send();
         tablePart.style.visibility="visible";
+
+
     }
 </script>
 <body>
@@ -159,10 +178,10 @@
         <ul>
             <li style="float:left"><a href="index.html" >SMPAT HOME</a></li>
             <li><a href="twitterAPI.html" class="active">Twitter Predictions</a></li>
-            <li><a href="#news">News Predictions</a></li>
-            <li><a href="#contact">Correlation</a></li>
-            <li><a href="#contact">Stock Investment</a></li>
-            <li><a href="#contact">Investment Recommendations</a></li>
+            <li><a href="newsAPI.html">News Predictions</a></li>
+            <li><a href="Correlation.html">Correlation</a></li>
+            <li><a href="StockRNN.html">Stock RNN</a></li>
+            <li><a href="Investment.html">Investment Recommendations</a></li>
             <li style="float:right"><a class="active" href="#about">About</a></li>
         </ul>
     </navbar>
@@ -172,15 +191,28 @@
     <div>
         <span style="font-family:Arial">Follow the latest Stock market news here.</span>
     </div>
+    <div>
+        <img src="peslogo.png" height="100px" width="100px"/>
+    </div>
 </div>
 
 <div align="center" style="columns: max-content";>
-    <select>
-        <option>INFY</option>
-        <option>TATAMOTORS</option>
-        <option>TVSMOTOR</option>
-        <option>SBIN</option>
+    <select id="symbol">
+        <option>ASHOKLEY</option>
+        <option>BAJAJ-AUTO</option>
+        <option>BIOCON</option>
+        <option>DABUR</option>
+        <option>GREENPLY</option>
         <option>HCLTECH</option>
+        <option>HOTELEELA</option>
+        <!--<option>INDBANK</option>-->
+        <option>INFIBEAM</option>
+        <option>INFY</option>
+        <option>MARUTI</option>
+        <option>MEP</option>
+        <option>MHRIL</option>
+        <option>MINDTREE</option>
+        <option>RELIANCE</option>
     </select>
     <div style="margin: 10px;padding: 10px";>
         <button onclick="populateDataTab()">GO</button>
@@ -197,11 +229,6 @@
 
 <div style="width: 50%; float:left">
     <div id="table" style="overflow-x:auto;margin-left: 4px;visibility: hidden";>
-
-        <table id="tableData" style="width:100%">
-
-        </table>
-
     </div>
 </div>
 
