@@ -76,7 +76,9 @@
         dataPart=document.getElementById("dataPart");
         xhr2=new XMLHttpRequest();
         xhr2.onreadystatechange=getResponseInvest;
-        xhr2.open("GET","http://localhost:63342/smpat-ui/RecommendedStocks.txt",true);
+        amount=document.getElementById("amount");
+        url= "http://localhost:63342/smpat-ui/RecommendedStocks"+amount.value+".txt";
+        xhr2.open("GET",url,true);
         xhr2.send();
         dataPart.style.visibility="visible";
     }
@@ -125,9 +127,9 @@
 </div>
 
 <div align="center" style="columns: max-content">
-    <select id="symbol">
+    <select id="amount">
         <option>5000</option>
-        <option>10000</option>
+        <option>7500</option>
     </select>
     <div style="margin: 10px;padding: 10px">
         <button onclick="populateDataTab()">GO</button>
